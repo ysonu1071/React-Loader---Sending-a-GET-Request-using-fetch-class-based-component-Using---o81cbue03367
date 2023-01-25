@@ -20,7 +20,31 @@ const App = () => {
     webiste: "",
   });
 
-  const handleOnClick = () => {};
+  const handleOnClick = () => {
+    setIsLoading(LoadingStatus.IN_PROGRESS)
+    let d;
+    const fetchData = async() => {
+      const response = await fetch(BASE_URL+`/${userId}`);
+      const data = await response.json();
+      d = data;
+      // console.log(d.website)
+    }
+
+    fetchData()
+    setTimeout(() => {
+      let udata = {
+        id: d.id,
+        email: d.email,
+        name: d.name,
+        phone: d.phone,
+        webiste: d.website,
+      }
+
+      setUserData(udata);
+      setIsLoading(LoadingStatus.SUCCESS);
+    }, 2000);
+
+  };
 
   const onChangeHandler = (event) => {
     setUserId(event.target.value);
@@ -42,12 +66,13 @@ const App = () => {
       </button>
 
       <div id="data">
-        <h1>Click on the button to get the user</h1>
+        {isLoading == 'NOT_STARTED'? <h1>Click on the button to get the user</h1>: (isLoading == 'IN_PROGRESS')? <Loader/>: <>
         <h4 id="id">{userData.id}</h4>
         <h4 id="email">{userData.email}</h4>
         <h4 id="name">{userData.name}</h4>
         <h4 id="phone">{userData.phone}</h4>
-        <h4 id="website">{userData.website}</h4>
+        <h4 id="website">{userData.webiste}</h4>
+        </> }
       </div>
     </div>
   );
